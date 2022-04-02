@@ -5,6 +5,7 @@ const rateLimit = require('express-rate-limit')
 const { check } = require('express-validator')
 const api = require('./api')
 const isAuth = require('./middleware/isAuthenticated')
+const { initDB } = require('./init-db')
 
 const app = express()
 const port = parseInt(process.env.PORT, 10) || 8084
@@ -55,7 +56,8 @@ app.delete('/donations/:id', isAuth, api.deleteDonation)
 app.get('/top10', api.getTop10)
 
 try {
-  app.listen(port, () => {
+  app.listen(port, async () => {
+    await initDB()
     console.log(`Connected successfully on port ${ port }`)
   })
 } catch (error) {
