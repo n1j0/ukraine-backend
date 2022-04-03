@@ -11,7 +11,7 @@ const app = express()
 const port = parseInt(process.env.PORT, 10) || 8084
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: 50,
+  max: 100,
   standardHeaders: true,
   legacyHeaders: false,
 })
