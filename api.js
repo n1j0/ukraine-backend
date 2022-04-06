@@ -2,6 +2,7 @@ const db = require('./config/database')
 const config = require('./config/auth')
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs')
+const decode = require('html-entities-decoder')
 
 const addHeadersToResponse = (res) => {
   res.setHeader('Access-Control-Allow-Origin', '*')
@@ -75,6 +76,7 @@ const getKilometers = async (req, res) => {
       queryResult = (await client.query('SELECT "id", "name", "kilometers" from kilometers')).rows
     } else {
       queryResult = (await client.query('SELECT * from kilometers WHERE id = $1', [ req.params.id ])).rows[0]
+      queryResult.image = decode(queryResult.image)
     }
     client.release()
     return res.status(200).json(queryResult)
@@ -110,6 +112,7 @@ const getDonations = async (req, res) => {
       queryResult = (await client.query('SELECT "id", "name", "amount" from donations')).rows
     } else {
       queryResult = (await client.query('SELECT * from donations WHERE id = $1', [ req.params.id ])).rows[0]
+      queryResult.image = decode(queryResult.image)
     }
     client.release()
     return res.status(200).json(queryResult)
