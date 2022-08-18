@@ -7,7 +7,10 @@ const initDB = async () => {
     client.query('CREATE TABLE IF NOT EXISTS "donations" ("id" SERIAL PRIMARY KEY, "name" varchar(255), "amount" decimal(65,2), "image" varchar)'),
     client.query('CREATE TABLE IF NOT EXISTS "users" ("id" SERIAL PRIMARY KEY, "username" varchar(255), "password" varchar)')
   ])
-  await client.query('INSERT INTO "users" (username, password) VALUES (\'admin\', \'$2a$12$tSiOhEZuKdDOgl9DqgrAKuS4Ze4WfUSI.wjM/oEa6lbCxKw4Xdptq\')')
+  const user = (await client.query('SELECT * from "users"'))
+  if (!user) {
+    await client.query('INSERT INTO "users" (username, password) VALUES (\'admin\', process.env.FE_PASSWORD)')
+  }
   await client.release()
 }
 
