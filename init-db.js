@@ -9,7 +9,7 @@ const initDB = async () => {
   ])
   const user = (await client.query('SELECT * from "users"'))
   if (!user) {
-    await client.query('INSERT INTO "users" (username, password) VALUES (\'admin\', process.env.FE_PASSWORD)')
+    await client.query('INSERT INTO "users" (username, password) VALUES (\'admin\', $1)', [process.env.FE_PASSWORD])
   }
   await client.release()
 }
